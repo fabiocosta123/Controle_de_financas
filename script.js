@@ -17,12 +17,18 @@ const inputTransactionAmount = document.querySelector('#amount')
 
 
 // array com os produtos
-const dummyTransactions = [                                     
+let dummyTransactions = [                                     
     {id: 1, name: 'Bolo de brigadeiro', amount: -20},
     {id: 1, name: 'Salário', amount: 5000},
     {id: 1, name: 'Combustivel', amount: -50},
     {id: 1, name: 'Mercado Bela Vista', amount: -35}
  ]
+
+ //remove os itens
+ const removeTransaction = ID => {
+     dummyTransactions = dummyTransactions.filter(transaction => transaction.id !== ID)
+     init()
+ }
  
  // identifica transação e insere lista no html
 const addTransactionsIntoDom = transaction => {
@@ -33,7 +39,11 @@ const addTransactionsIntoDom = transaction => {
  
     li.classList.add(CSSclass)
     li.innerHTML = `
-        ${transaction.name} <span>${operation} R$${amountWithoutOperation}</span><button class="delete-btn">x</button>
+        ${transaction.name} 
+        <span>${operation} R$${amountWithoutOperation}</span>
+        <button class="delete-btn" onclick="removeTransaction(${transaction.id})">
+            x
+        </button>
     `
     transactionsUl.append(li)
     console.log(li);
