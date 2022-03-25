@@ -16,18 +16,28 @@ const inputTransactionAmount = document.querySelector('#amount')
 
 
 
-// array com os produtos
-let dummyTransactions = [                                     
+/*// array com os produtos
+Função está comentada por causa do criação dinamica de itens pela transações,
+
+let transactions = [                                     
     {id: 1, name: 'Bolo de brigadeiro', amount: -20},
     {id: 1, name: 'Salário', amount: 5000},
     {id: 1, name: 'Combustivel', amount: -50},
     {id: 1, name: 'Mercado Bela Vista', amount: -35}
- ]
+ ]*/
+
+ // localstorage
+ const localstorageTransactions = JSON.parse(localStorage
+    .getItem('transactions')) 
+ let transactions = localStorage
+    .getItem('transactions') !== null ? localstorageTransactions : []
 
  //remove os itens
  const removeTransaction = ID => {
-     dummyTransactions = dummyTransactions.filter(transaction => transaction.id !== ID)
-     init()
+    transactions = transactions.filter(transaction => 
+    transaction.id !== ID)
+    updateLocalStorage()
+    init()
  }
  
  // identifica transação e insere lista no html
@@ -51,13 +61,13 @@ const addTransactionsIntoDom = transaction => {
  // reiniciar a pagina quando uma transação for executada
 const init = () => {
     transactionsUl.innerHTML = ''
-    dummyTransactions.forEach(addTransactionsIntoDom)
+    transactions.forEach(addTransactionsIntoDom)
     updateBalanceValues()
 }
 
 // função para calcular receitas e despesas
 const updateBalanceValues = () => {
-    const transactionAmounts = dummyTransactions
+    const transactionAmounts = transactions
         .map(transaction => transaction.amount)
     const total = transactionAmounts
         .reduce((accumulator, transaction) => accumulator + transaction, 0)
@@ -80,6 +90,10 @@ const updateBalanceValues = () => {
 
 init()
 
+const updateLocalStorage = () => {
+    localStorage.setItem('transactions', JSON.stringify(transactions))
+}
+
 const generateID = () => Math.round(Math.random()*1000)
 form.addEventListener('submit', event => {
     event.preventDefault()
@@ -96,8 +110,9 @@ form.addEventListener('submit', event => {
         name: transactionName, 
         amount: Number(transactionAmount)
     }
-    dummyTransactions.push(transaction)
+    transactions.push(transaction)
     init()
+    updateLocalStorage()
 
     inputTransactionName.value = ''
     inputTransactionAmount.value = ''
