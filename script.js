@@ -1,5 +1,20 @@
 // está pegando o botão do html e jogando nessa variavel
 const transactionsUl = document.querySelector('#transactions')
+// está pegando o id da receita 
+const incomeDisplay = document.querySelector('#money-plus')
+// está pegando o id das despesas
+const expenseDisplay = document.querySelector('#money-minus')
+// está pegando o id do balanço 
+const balanceDisplay = document.querySelector('#balance')
+// está pegando o id do form
+const form = document.querySelector('#form')
+//pegando o id do input do nome da transação
+const inputTransactionName = document.querySelector('#text')
+//pegando o id do input do valor
+const inputTransactionAmount = document.querySelector('#amount')
+
+
+
 
 // array com os produtos
 const dummyTransactions = [                                     
@@ -25,6 +40,7 @@ const addTransactionsIntoDom = transaction => {
 }
  // reiniciar a pagina quando uma transação for executada
 const init = () => {
+    transactionsUl.innerHTML = ''
     dummyTransactions.forEach(addTransactionsIntoDom)
     updateBalanceValues()
 }
@@ -40,12 +56,40 @@ const updateBalanceValues = () => {
         .filter(value => value > 0)
         .reduce((accumulator, value) => accumulator + value, 0)
         .toFixed(2)
-    const expense = transactionAmounts
+    const expense = Math.abs(transactionAmounts
         .filter(value => value <0)
-        .reduce((accumulator, value) => accumulator + value, 0)
+        .reduce((accumulator, value) => accumulator + value, 0))
         .toFixed(2)
+
+    balanceDisplay.textContent = `R$ ${total}`
+    incomeDisplay.textContent = `R$ ${income}`
+    expenseDisplay.textContent = `R$ ${expense}`
     console.log(expense);
 }
  
 
 init()
+
+const generateID = () => Math.round(Math.random()*1000)
+form.addEventListener('submit', event => {
+    event.preventDefault()
+
+    const transactionName = inputTransactionName.value.trim()
+    const transactionAmount = inputTransactionAmount.value.trim()
+    if(inputTransactionName.value.trim()=== '' || inputTransactionAmount.value.trim()=== ''){
+        alert('Por favor preencha tanto o nome quanto o valor da transação')
+        return
+    }
+
+    const transaction =  {
+        id: generateID(),
+        name: transactionName, 
+        amount: Number(transactionAmount)
+    }
+    dummyTransactions.push(transaction)
+    init()
+
+    inputTransactionName.value = ''
+    inputTransactionAmount.value = ''
+
+})
