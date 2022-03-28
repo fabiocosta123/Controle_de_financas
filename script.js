@@ -1,4 +1,4 @@
-// está pegando o botão do html e jogando nessa variavel
+// está pegando o id da ul  do html e jogando nessa variavel
 const transactionsUl = document.querySelector('#transactions')
 // está pegando o id da receita 
 const incomeDisplay = document.querySelector('#money-plus')
@@ -55,7 +55,7 @@ const addTransactionsIntoDom = transaction => {
             x
         </button>
     `
-    transactionsUl.append(li)
+    transactionsUl.appendChild(li)
     console.log(li);
 }
  // reiniciar a pagina quando uma transação for executada
